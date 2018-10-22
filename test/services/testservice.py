@@ -10,7 +10,7 @@ class Person(LadonType):
 
 
 class TestService(object):
-    
+
     @ladonize(PORTABLE_STRING, PORTABLE_STRING, rtype=Person)
     def returnComplexType(self, first_name, last_name):
         person = Person()

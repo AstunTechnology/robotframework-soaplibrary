@@ -46,7 +46,7 @@ class Director(object):
     """Directs requests a root app or other spps mapped to a single path part above root."""
     def __init__(self, root_app, **other_apps):
         self._root_app = root_app
-        self._other_apps = dict([(key.lower(), value) for key, value in other_apps.iteritems()])
+        self._other_apps = dict([(key.lower(), value) for key, value in other_apps.items()])
 
     def __call__(self, environ, start_response):
         orig_path = environ.get('PATH_INFO')
@@ -71,7 +71,7 @@ class WebServer(object):
         application = Director(unsecured, secure=secured)
         server = wsgiref.simple_server.make_server('', port, application)
         server.serve_forever()
-        
+
     def _create_web_services(self, name):
         return LadonWSGIApplication(
             service_modules,
@@ -94,7 +94,7 @@ class TestWebServices(object):
 
     def stop_services(self):
         self.server.kill()
-    
+
 if __name__ == '__main__':
     stuff = [
         ('Unsecured web services', 'http://localhost:%(port)s/'),
@@ -103,5 +103,5 @@ if __name__ == '__main__':
         ('Secured files', 'http://localhost:%(port)s/secure/wsdls/')
     ]
     for item in stuff:
-        print item[0] + ' : ' + item[1] % {'port': port}
+        print(item[0] + ' : ' + item[1] % {'port': port})
     WebServer().start()
