@@ -12,4 +12,5 @@ test/results
 dist
 build
 .vscode
+venv
 **/__pycache__
