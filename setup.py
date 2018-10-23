@@ -1,47 +1,41 @@
 #!/usr/bin/env python
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 
-import os
-import sys
-from os.path import join, dirname
 
-sys.path.append(join(dirname(__file__), 'src'))
-from ez_setup import use_setuptools
-use_setuptools()
-from setuptools import setup
+"""Setup script for robotframework-soaplibrary for Robot Framework"""
 
-execfile(join(dirname(__file__), 'src', 'SoapLibrary', 'version.py'))
+from distutils.core import setup
 
-DESCRIPTION = """
-SoapLibrary is a web service testing library for Robot Framework
-that leverages zeep to test SOAP-based services.
-""".strip()
+import sys, os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
-CLASSIFIERS  = """
-Development Status :: 3 - Alpha
-License :: OSI Approved :: Apache Software License
-Operating System :: OS Independent
-Programming Language :: Python
-Topic :: Software Development :: Testing
-""".strip().splitlines()
+from SoapLibrary import __version__
 
-import zeep
+def main():
+    setup(name         = 'robotframework-soaplibrary',
+          version      = __version__,
+          description  = 'SoapLibrary Testing Keywords for using zeep with the Robot Framework',
+          author       = 'Astun Technology',
+          author_email = '',
+          url          = '',
+          package_dir  = { '' : 'src'},
+          packages     = ['SoapLibrary'],
+          install_requires = [
+              'robotframework >= 3.0.0'
+              'zeep >= 3.1.0'
+          ]
+          )
 
-setup(name         = 'robotframework-soaplibrary',
-      version      = VERSION,
-      description  = 'Robot Framework test library for SOAP-based services using zeep.',
-      long_description = DESCRIPTION,
-      author       = 'Astun Technology',
-      author_email = '<developers@astuntechnology.com>',
-      url          = 'https://github.com/AstunTechnology/robotframework-soaplibrary',
-      license      = 'Apache License 2.0',
-      keywords     = 'robotframework testing testautomation soap zeep web service',
-      platforms    = 'any',
-      classifiers  = CLASSIFIERS,
-      zip_safe     = True,
-      install_requires = [
-                            'zeep >= 3.1.0',
-                            'robotframework >= 3.0.0',
-                         ],
-      package_dir  = {'' : 'src'},
-      packages     = ['SoapLibrary']
-      )
+
+if __name__ == "__main__":
+    main()
