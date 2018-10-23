@@ -17,7 +17,7 @@ that leverages zeep to test SOAP-based services.
 """.strip()
 
 CLASSIFIERS  = """
-Development Status :: 5 - Development
+Development Status :: 3 - Alpha
 License :: OSI Approved :: Apache Software License
 Operating System :: OS Independent
 Programming Language :: Python
