@@ -4,10 +4,10 @@ try:
     from robot.libdoc import libdoc
 except:
     def main():
-        print """Robot Framework 2.7 or later required for generating documentation"""
+        print("""Robot Framework 2.7 or later required for generating documentation""")
 else:
     def main():
-        libdoc(join(dirname(__file__),'..','src','SudsLibrary'), join(dirname(__file__),'SudsLibrary.html'))
+        libdoc(join(dirname(__file__),'..','src','SoapLibrary'), join(dirname(__file__),'SoapLibrary.html'))
 
 
 if __name__ == '__main__':
