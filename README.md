@@ -20,9 +20,9 @@ python -m venv venv
 pip install -r requirements.txt
 ```
 - [Download and install npm](https://nodejs.org/en/) (required for running local webservices)
-- Install http-server
+- Install http-server (add *-g* option to install http-server for all users)
 ```
-npm install http-server -g
+npm install http-server
 ```
 
 ## Running Tests
