@@ -9,6 +9,90 @@ from requests.auth import HTTPBasicAuth, HTTPProxyAuth, HTTPDigestAuth
 class ClientManagementKeywords(object):
 
     def create_soap_client(self, url_or_path, timeout=90, username=None, password=None, auth_type='NONE', settings={}):
+        """Creates a Soap client using the zeep library
+
+        -----
+
+        Param
+
+        *url_or_path :: string*
+
+            The URL or path to the webservice. The client can read either a
+            remote webservice or a local file from the OS
+
+        -----
+
+        Param
+
+        *timeout :: integer [90]*
+
+            The number of seconds before the request to the webservice times
+            out
+
+        -----
+
+        Param
+
+        *username :: string [None]*
+
+            The username used for authenticating against webservices. If this
+            is set, then the auth_type must also be set to something other
+            than None
+
+        -----
+
+        Param
+
+        *password :: string [None]*
+
+            The password used for authenticating against webservices
+
+        -----
+
+        Param
+
+        *auth_type :: string ["NONE"]*
+
+            The authentication type to use when communicating with
+            the webservice. Options are NONE, BASIC, PROXY and DIGEST. Any
+            other than None requires that credentials also be supplied
+
+        -----
+
+        Param
+
+        *Settings :: dict [Empty]*
+
+            The settings allows the user to specify various settings to
+            use when communicating with the webservice. They are detailed
+            here: https://python-zeep.readthedocs.io/en/master/settings.html
+
+        -----
+
+        Return
+
+        *Client*
+
+            The client used for communicating with the webservice
+
+        -----
+
+        | A simple example |
+        |                  | Create Soap Client | http://some-web-url.com/webservice?wsdl |
+        |                  | ${answer}= | Call Soap Method | getTheAnswer |
+
+        | Settings example |
+        |                   | &{settings}= | Create Dictionary | strict=False | raw_response=True |
+        |                   | Create Soap Client | http://some-web-url.com/webservice?wsdl | settings=&{settings} |
+        |                   | ${answer}= | Call Soap Method | getTheAnswer |
+
+        | Basic authentication example |
+        |                  | Create Soap Client | http://some-web-url.com/webservice?wsdl | username=bob | password=bobspassword | auth_type=BASIC |
+        |                  | ${answer}= | Call Soap Method | getTheAnswer |
+
+        """
+
+
         url = url_or_path
 
         transport = Transport(timeout=timeout)
@@ -49,9 +133,67 @@ class ClientManagementKeywords(object):
         return self.client
 
     def call_soap_method(self, method, params=[]):
+        """Calls a method on the connected webservice
+
+        -----
+
+        Param
+
+        *method : string*
+
+            The name of the method to call
+
+        ------
+
+        Param
+
+        *params : list [Empty]*
+
+            A list of parameters to pass to the method which must
+            be specified in the order that the webservice is
+            expecting them
+
+        ------
+
+        Return
+
+        *result*
+
+            An object determined to be the result of the call to
+            the webservice
+
+        ------
+
+        | A simple example |
+        |                  | Create Soap Client | http://some-web-url.com/webservice?wsdl |
+        |                  | ${answer}= | Call Soap Method | getTheAnswer |
+
+        """
+
+
         return self.client.service[method](*params)
 
     def get_auth_type(self):
+        """A utility keyword to determine which authentication is
+        set in the current client
+
+        -----
+
+        Return
+
+        *auth_type*
+
+            Either NONE, BASiC, PROXY, DIGEST or UNKNOWN
+
+        -----
+
+        | Basic authentication example |
+        |                  | Create Soap Client | http://some-web-url.com/webservice?wsdl | username=bob | password=bobspassword | auth_type=BASIC |
+        |                  | ${auth_type}= | Get Auth Type |
+
+        """
+
+
         if self.client.transport.session.auth is None:
             return 'NONE'
         elif type(self.client.transport.session.auth) is HTTPBasicAuth:
