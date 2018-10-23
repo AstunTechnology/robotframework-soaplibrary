@@ -26,11 +26,11 @@ npm install http-server
 ```
 
 ## Running Tests
-- Activate the local webservices
+- Activate the local webservices in one terminal
 ```
 python ./Test/TestWebServices.py
 ```
-- Run the tests
+- Run the tests in another terminal
 ```
 python ./Test/run_tests.py
 ```
