@@ -21,7 +21,11 @@ pip install -r requirements.txt
 ```
 
 ## Running Tests
+- Activate the local webservices
 ```
 python ./Test/TestWebServices.py
+```
+- Run the tests
+```
 python ./Test/run_tests.py
 ```
