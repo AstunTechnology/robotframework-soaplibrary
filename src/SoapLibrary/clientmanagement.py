@@ -78,17 +78,17 @@ class ClientManagementKeywords(object):
         -----
 
         | A simple example |
-        |                  | Create Soap Client | http://some-web-url.com/webservice?wsdl |
-        |                  | ${answer}= | Call Soap Method | getTheAnswer |
+        |                  | ${client}= | Create Soap Client | http://some-web-url.com/webservice?wsdl |
+        |                  | ${answer}= | Call Soap Method | ${client} | getTheAnswer |
 
         | Settings example |
         |                   | &{settings}= | Create Dictionary | strict=False | raw_response=True |
-        |                   | Create Soap Client | http://some-web-url.com/webservice?wsdl | settings=&{settings} |
-        |                   | ${answer}= | Call Soap Method | getTheAnswer |
+        |                   | ${client}= |  Create Soap Client | http://some-web-url.com/webservice?wsdl | settings=&{settings} |
+        |                   | ${answer}= | Call Soap Method | ${client} | getTheAnswer |
 
         | Basic authentication example |
-        |                  | Create Soap Client | http://some-web-url.com/webservice?wsdl | username=bob | password=bobspassword | auth_type=BASIC |
-        |                  | ${answer}= | Call Soap Method | getTheAnswer |
+        |                  | ${client}= |  Create Soap Client | http://some-web-url.com/webservice?wsdl | username=bob | password=bobspassword | auth_type=BASIC |
+        |                  | ${answer}= | Call Soap Method | ${client} | getTheAnswer |
 
         """
 
@@ -128,12 +128,20 @@ class ClientManagementKeywords(object):
                     elif key == 'extra_http_headers':
                         client_settings.extra_http_headers = settings[key]
 
-        self.client = Client(url, transport=transport, plugins=[HistoryPlugin()], settings=client_settings)
+        client = Client(url, transport=transport, plugins=[HistoryPlugin()], settings=client_settings)
 
-        return self.client
+        return client
 
-    def call_soap_method(self, method, params=[]):
+    def call_soap_method(self, client, method, params=[]):
         """Calls a method on the connected webservice
+
+        -----
+
+        Param
+
+        *client : Zeep Client*
+
+            The Client returned from the Create Soap Client method
 
         -----
 
@@ -171,11 +179,19 @@ class ClientManagementKeywords(object):
         """
 
 
-        return self.client.service[method](*params)
+        return client.service[method](*params)
 
-    def get_auth_type(self):
+    def get_auth_type(self, client):
         """A utility keyword to determine which authentication is
         set in the current client
+
+        -----
+
+        Param
+
+        *client : Zeep Client*
+
+            The Client returned from the Create Soap Client method
 
         -----
 
@@ -194,13 +210,13 @@ class ClientManagementKeywords(object):
         """
 
 
-        if self.client.transport.session.auth is None:
+        if client.transport.session.auth is None:
             return 'NONE'
-        elif type(self.client.transport.session.auth) is HTTPBasicAuth:
+        elif type(client.transport.session.auth) is HTTPBasicAuth:
             return 'BASIC'
-        elif type(self.client.transport.session.auth) is HTTPProxyAuth:
+        elif type(client.transport.session.auth) is HTTPProxyAuth:
             return 'PROXY'
-        elif type(self.client.transport.session.auth) is  HTTPDigestAuth:
+        elif type(client.transport.session.auth) is  HTTPDigestAuth:
             return 'DIGEST'
         else:
             return 'UNKNOWN'

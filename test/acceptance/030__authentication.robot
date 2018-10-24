@@ -23,6 +23,6 @@ Documentation   Basic authentication tests for the SoapLibrary
 
 | *** Test Cases *** |
 | Authenticated method call with credentials |
-|                   | Create Soap Client | ${SECURE TEST WSDL URL} | username=bob | password=bob | auth_type=BASIC |
-|                   | ${answer}= | Call Soap Method | theAnswer |
+|                   | ${client}= | Create Soap Client | ${SECURE TEST WSDL URL} | username=bob | password=bob | auth_type=BASIC |
+|                   | ${answer}= | Call Soap Method | ${client} | theAnswer |
 |                   | Should Be Equal As Integers | ${answer} | 42 |

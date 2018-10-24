@@ -19,13 +19,13 @@ Documentation   Test for basic functionality
 
 | *** Test Cases *** |
 | Calling webservice without params |
-|                   | Create Soap Client | ${TEST WSDL URL} |
-|                   | ${answer}= | Call Soap Method | theAnswer |
+|                   | ${client}= | Create Soap Client | ${TEST WSDL URL} |
+|                   | ${answer}= | Call Soap Method | ${client} | theAnswer |
 |                   | Should Be Equal As Integers | ${answer} | 42 |
 
 | *** Test Cases *** |
 | Calling webservice with params |
-|                   | Create Soap Client | ${CALCULATOR WSDL URL} |
+|                   | ${client}= | Create Soap Client | ${CALCULATOR WSDL URL} |
 |                   | ${params}= | Create List | 7 | 3 |
-|                   | ${answer}= | Call Soap Method | add | ${params} |
+|                   | ${answer}= | Call Soap Method | ${client} | add | ${params} |
 |                   | Should Be Equal As Integers | ${answer} | 10 |
