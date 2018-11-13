@@ -29,11 +29,7 @@ def main():
           author_email = '',
           url          = '',
           package_dir  = { '' : 'src'},
-          packages     = ['SoapLibrary'],
-          install_requires = [
-              'robotframework >= 3.0.0'
-              'zeep >= 3.1.0'
-          ]
+          packages     = ['SoapLibrary']
           )
 
 
