@@ -14,7 +14,7 @@
 
 """Setup script for robotframework-soaplibrary for Robot Framework"""
 
-from distutils.core import setup
+from setuptools import setup
 
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
@@ -29,11 +29,7 @@ def main():
           author_email = '',
           url          = '',
           package_dir  = { '' : 'src'},
-          packages     = ['SoapLibrary'],
-          install_requires = [
-              'robotframework >= 3.0.0'
-              'zeep >= 3.1.0'
-          ]
+          packages     = ['SoapLibrary']
           )
 
 
