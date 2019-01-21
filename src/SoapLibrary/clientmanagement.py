@@ -2,13 +2,14 @@ from zeep import Client
 from zeep.plugins import HistoryPlugin
 from zeep.settings import Settings
 from zeep.transports import Transport
+from zeep.cache import InMemoryCache
 from requests import Session
 from requests.auth import HTTPBasicAuth, HTTPProxyAuth, HTTPDigestAuth
-
+from .cache import InMemoryCachePreloader
 
 class ClientManagementKeywords(object):
 
-    def create_soap_client(self, url_or_path, timeout=90, username=None, password=None, auth_type='NONE', settings={}):
+    def create_soap_client(self, url_or_path, timeout=90, username=None, password=None, auth_type='NONE', settings={}, cache=None):
         """Creates a Soap client using the zeep library
 
         -----
@@ -95,7 +96,7 @@ class ClientManagementKeywords(object):
 
         url = url_or_path
 
-        transport = Transport(timeout=timeout)
+        transport = Transport(timeout=timeout, cache=cache)
         if auth_type != 'NONE':
             session = Session()
             if auth_type == 'BASIC':
@@ -104,7 +105,7 @@ class ClientManagementKeywords(object):
                 session.auth = HTTPProxyAuth(username, password)
             elif auth_type == 'DIGEST':
                 session.auth = HTTPDigestAuth(username, password)
-            transport = Transport(session=session, timeout=timeout)
+            transport = Transport(session=session, timeout=timeout, cache=cache)
 
         client_settings = Settings()
         if len(settings) > 0:
@@ -220,3 +221,7 @@ class ClientManagementKeywords(object):
             return 'DIGEST'
         else:
             return 'UNKNOWN'
+
+    def create_cache_preloader(self, base_path):
+        """Returns an instance of the InMemoryCachePreloader"""
+        return InMemoryCachePreloader(base_path)
