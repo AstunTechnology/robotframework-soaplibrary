@@ -15,9 +15,9 @@ class InMemoryCachePreloader(InMemoryCache):
         logging.info('Creating cache {0}'.format(base_path))
         self.base_path = base_path
         super().__init__()
-    
+
     def add_file(self, url, path):
-        full_path = os.path.join(self. base_path, path)
+        full_path = os.path.join(self.base_path, path)
         logging.info('Adding cache item {0} at {1}'.format(url, full_path))
         content = self._load_from_disk(full_path)
         if content is None:

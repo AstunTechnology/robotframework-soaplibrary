@@ -1,4 +1,4 @@
-from zeep import Client
+from zeep import Client, xsd, helpers
 from zeep.plugins import HistoryPlugin
 from zeep.settings import Settings
 from zeep.transports import Transport
@@ -133,7 +133,7 @@ class ClientManagementKeywords(object):
 
         return client
 
-    def call_soap_method(self, client, method, params=[]):
+    def call_soap_method(self, client, method, params={}):
         """Calls a method on the connected webservice
 
         -----
@@ -178,19 +178,10 @@ class ClientManagementKeywords(object):
         |                  | ${answer}= | Call Soap Method | getTheAnswer |
 
         """
-        params_for_call = []
-    
-        # Some parameters need to be passed in a particular way
-        # Update these parameters appropriately    
-        for param in params:
-            param_to_add = param
-            if type(param) is list:
-                if all(isinstance(item, str) for item in param):
-                    aos = client.get_type('ns0:ArrayOfString')
-                    param_to_add = aos(param)
-            params_for_call.append(param_to_add)   
 
-        return client.service[method](*params_for_call)
+
+        print("Parameters: {0}".format(params))
+        return client.service[method](**params)
 
     def get_auth_type(self, client):
         """A utility keyword to determine which authentication is
