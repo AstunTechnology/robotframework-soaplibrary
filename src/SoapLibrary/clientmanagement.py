@@ -179,9 +179,24 @@ class ClientManagementKeywords(object):
 
         """
 
+        # convert any custom types into the correct zeep type
+        params_dict = {}
+        for key in params:
+            param = params[key]
+            if type(params[key]).__name__ == "ArrayOfStrings":
+                # convert to ArrayOfStrings
+                aos = client.get_type("ns0:ArrayOfString")
+                params_dict[key] = aos(params[key])
+            elif type(params[key]).__name__ == "ArrayOfAny":
+                # convert to ArrayOfAny
+                params_dict[key] = [ ]
+                for item in params[key]:
+                    params_dict[key].append(xsd.AnyObject(xsd.String(), item))
+            else:
+                params_dict[key] = param
 
-        print("Parameters: {0}".format(params))
-        return client.service[method](**params)
+        print("Parameters: {0}".format(params_dict))
+        return client.service[method](**params_dict)
 
     def get_auth_type(self, client):
         """A utility keyword to determine which authentication is

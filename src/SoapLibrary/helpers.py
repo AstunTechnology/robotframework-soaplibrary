@@ -1,5 +1,7 @@
+import io
 from collections import OrderedDict
 from zeep import xsd, helpers
+from lxml import etree
 
 class HelperKeywords(object):
 
@@ -15,20 +17,12 @@ class HelperKeywords(object):
     def Nil(self):
         return helpers.Nil()
 
-    def convert_to_anytype_list(self, value):
-        result = [ ]
-        for item in value:
-            result.append(self.convert_to_anytype(item))
-        return result
+    class ArrayOfStrings(list):
 
-    def convert_to_string_list(self, value):
-        result = [ ]
-        for item in value:
-            result.append(self.convert_to_string(item))
-        return result
+        def init(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
 
-    def convert_to_anytype(self, value):
-        return xsd.AnyObject(xsd.String(), value)
+    class ArrayOfAny(list):
 
-    def convert_to_string(self, value):
-        return xsd.String(value)
+        def init(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
